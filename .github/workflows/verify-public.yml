@@ -1,0 +1,11 @@
+name: Verify public notice
+on:
+  workflow_dispatch:
+jobs:
+  external-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch public policy without authentication
+        run: |
+          curl --fail --silent --show-error --location --proto '=https' https://seonil.github.io/purchasing-extension-notice/ -o /tmp/notice.html
+          python3 -c "from pathlib import Path; t=Path('/tmp/notice.html').read_text(); assert 'MOTREX' in t and 'English' in t; print('PASS: external unauthenticated HTTPS policy fetch')"
